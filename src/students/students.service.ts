@@ -7,6 +7,7 @@ import { UpdateStudentDto } from './dto/update-student.dto';
 import { Course } from './entitites/course.entity';
 import { PaginationQueryDto } from './dto/pagination-query.dto';
 import { Event } from '../events/entities/event.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class StudentsService {
@@ -16,7 +17,11 @@ export class StudentsService {
     @InjectRepository(Course)
     private readonly courseRepository: Repository<Course>,
     private readonly datasource: DataSource,
-  ) {}
+    private readonly configService: ConfigService,
+  ) {
+    const databaseHost = this.configService.get<string>('DATABASE_HOST');
+    console.log(databaseHost);
+  }
 
   findAll(paginationQuery: PaginationQueryDto) {
     const { limit, offset } = paginationQuery;
